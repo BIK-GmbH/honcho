@@ -18,18 +18,12 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 # Install the project's dependencies using the lockfile and settings
-# Note: Cache mounts with explicit id= for Railway builder compatibility
-RUN --mount=type=cache,id=uv-cache,target=/root/.cache/uv \
-    --mount=type=bind,source=uv.lock,target=uv.lock \
-    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --frozen --no-install-project --no-group dev
-
-# Copy only requirements to cache them in docker layer
+# Note: Cache mounts removed for Railway builder compatibility
 COPY uv.lock pyproject.toml /app/
+RUN uv sync --frozen --no-install-project --no-group dev
 
-# Sync the project
-RUN --mount=type=cache,id=uv-cache,target=/root/.cache/uv \
-    uv sync --frozen --no-group dev
+# Sync the project (full install)
+RUN uv sync --frozen --no-group dev
 
 # Place executables in the environment at the front of the path
 ENV PATH="/app/.venv/bin:$PATH"
