@@ -30,4 +30,5 @@ ENV HOME=/app
 USER app
 
 # Deriver runs as background worker — no exposed port
-CMD ["python", "-m", "src.deriver"]
+# Use ENTRYPOINT so Railway's startCommand cannot override it
+ENTRYPOINT ["python", "-m", "src.deriver"]
