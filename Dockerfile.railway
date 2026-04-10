@@ -37,4 +37,5 @@ ENV HOME=/app
 USER app
 EXPOSE 8000
 
-CMD ["fastapi", "run", "--host", "0.0.0.0", "src/main.py"]
+# Use a custom entrypoint that enables pgvector + runs migrations + starts API
+CMD ["sh", "docker/entrypoint.railway.sh"]
